@@ -30,19 +30,25 @@ class Gui:
     def pushPlayerHist(self, array):
         self.playerHist.configure(state="normal")
         self.playerHist.insert(END, "{}-{}-{}-{}-{}"
-                               .format(array[0], array[1], array[2], array[3], array[4]))
+                               .format(array[0], array[1], array[2], array[3], array[4])+'\n')
         self.playerHist.configure(state="disabled")
 
     def pushBotHist(self, array):
         self.botHist.configure(state="normal")
         self.botHist.insert(END, "{}-{}-{}-{}-{}"
-                            .format(array[0], array[1], array[2], array[3], array[4]))
+                            .format(array[0], array[1], array[2], array[3], array[4])+'\n')
+        self.botHist.configure(state="disabled")
+
+    def pushBotNewLine(self, amount):
+        self.botHist.configure(state="normal")
+        for i in range(0, amount):
+            self.botHist.insert(END, "  - - - - -\n")
         self.botHist.configure(state="disabled")
 
     def pushScoreHist(self, score, rollCount):
         scoreStr = ""
         for i in range(1, rollCount):
-            scoreStr += "  --\n"
+            scoreStr += "  - -\n"
         if score > 0:
             scoreStr += " +"
         elif score == 0:

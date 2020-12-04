@@ -12,6 +12,7 @@ class Game:
         self.Round = 1
         self.Score = 0
         self.RollCount = 0
+        self.botRollCount = 0
         self.playerHand = []
         self.botHand = []
 
@@ -31,22 +32,24 @@ class Game:
     def botRoll(self):
         #Only one roll available => simple response
         if self.RollCount == 1:
+            self.botRollCount += 1
             self.botHand = self.diceRoll()
             self.gui.pushBotHist(self.botHand)
         #More than one roll available, but on on first round => trying to keep up
         elif self.RollCount > 1 and self.Round == 1:
+            self.botRollCount += 1
             self.botHand = self.diceRoll()
             self.gui.pushBotHist(self.botHand)
             if self.countScore() > 2:
-                botRoll = self.RollCount -1
-                for i in range (0, botRoll):
+                while self.botRollCount <= self.RollCount:
+                    self.botRollCount += 1
                     self.botHand = self.diceRoll()
                     self.gui.pushBotHist(self.botHand)
-                    if self.countScore() > 2:
+                    if self.countScore() <= 2:
                         break
         #More than one roll available and its second or third round => minimax
         else:
-            #tree
+            pass
         self.nextRound()
 
     def evalRoll(self, roll):
@@ -86,6 +89,7 @@ class Game:
         #Refresh Score
         self.Score += self.countScore()
         self.gui.pushScoreHist(self.Score, self.RollCount)
+        self.gui.pushBotNewLine(self.RollCount - self.botRollCount)
         #If game ends
         if self.Round == 3:
             self.gui.playerButtonRoll.configure(state="disabled")
@@ -101,6 +105,7 @@ class Game:
         else:
             self.Round += 1
             self.RollCount = 0
+            self.botRollCount = 0
             self.playerHand = []
             self.botHand = []
             self.gui.playerButtonRoll.configure(state="normal")
