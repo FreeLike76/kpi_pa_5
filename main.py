@@ -1,4 +1,4 @@
-from gui import *
+from game import *
 
-main = Gui()
-main.root.mainloop()
+application = Game()
+application.gui.root.mainloop()

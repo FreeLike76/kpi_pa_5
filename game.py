@@ -1,7 +1,12 @@
+from gui import *
 import random
 
+
 class Game:
-    def __int__(self):
+    def __init__(self):
+        self.gui = Gui()
+        self.gui.playerButtonRoll.configure(command=self.playerRoll)
+
         self.Round = 1
         self.Score = 0
         self.RollCount = 0
@@ -12,6 +17,10 @@ class Game:
         return [random.randint(1, 6),
                 random.randint(1, 6), random.randint(1, 6),
                 random.randint(1, 6), random.randint(1, 6)]
+
+    def playerRoll(self):
+        self.playerHand = self.diceRoll()
+        self.gui.pushPlayerHist(self.playerHand)
 
     def evalRoll(self, roll):
         unique = set(roll)
