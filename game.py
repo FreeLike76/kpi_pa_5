@@ -39,14 +39,14 @@ class Game:
         #More than one roll available, but on on first round => trying to keep up
         if self.RollCount > 1 and self.Round == 1:
             if self.countScore() > 2:
-                while self.botRollCount <= self.RollCount:
+                while self.botRollCount < self.RollCount:
                     self.botRollCount += 1
                     self.botHand = self.diceRoll()
                     self.gui.pushBotHist(self.botHand)
                     if self.countScore() <= 2:
                         break
         #More than one roll available and its second or third round => minimax
-        else:
+        elif self.RollCount > 1 and self.Round != 1:
             self.botTree = Tree(self.RollCount, self.botRollCount, self.evalRoll(self.botHand))
             if self.botTree.decide() == 1:
                 self.botRollCount += 1
