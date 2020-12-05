@@ -48,13 +48,13 @@ class Game:
         #More than one roll available and its second or third round => minimax
         elif self.RollCount > 1 and self.Round != 1:
             self.botTree = Tree(self.RollCount, self.botRollCount, self.evalRoll(self.botHand))
-            if self.botTree.decide() == 1:
+            if self.botTree.decide() == 1 or self.Round == 3 and self.Score + self.countScore() > 0:
                 self.botRollCount += 1
                 self.botHand = self.diceRoll()
                 self.gui.pushBotHist(self.botHand)
                 if self.botRollCount < self.RollCount:
                     self.botTree = Tree(self.RollCount, self.botRollCount, self.evalRoll(self.botHand))
-                    if self.botTree.decide() == 1:
+                    if self.botTree.decide() == 1 or self.Round == 3 and self.Score + self.countScore() > 0:
                         self.botRollCount += 1
                         self.botHand = self.diceRoll()
                         self.gui.pushBotHist(self.botHand)
