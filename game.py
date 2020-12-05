@@ -1,4 +1,5 @@
 from gui import *
+from tree import *
 from tkinter import messagebox
 import random
 
@@ -15,6 +16,7 @@ class Game:
         self.botRollCount = 0
         self.playerHand = []
         self.botHand = []
+        self.botTree = None
 
     def diceRoll(self):
         return [random.randint(1, 6),
@@ -30,16 +32,12 @@ class Game:
             self.gui.playerButtonRoll.configure(state="disabled")
 
     def botRoll(self):
-        #Only one roll available => simple response
-        if self.RollCount == 1:
-            self.botRollCount += 1
-            self.botHand = self.diceRoll()
-            self.gui.pushBotHist(self.botHand)
+        #First bot Roll
+        self.botRollCount += 1
+        self.botHand = self.diceRoll()
+        self.gui.pushBotHist(self.botHand)
         #More than one roll available, but on on first round => trying to keep up
-        elif self.RollCount > 1 and self.Round == 1:
-            self.botRollCount += 1
-            self.botHand = self.diceRoll()
-            self.gui.pushBotHist(self.botHand)
+        if self.RollCount > 1 and self.Round == 1:
             if self.countScore() > 2:
                 while self.botRollCount <= self.RollCount:
                     self.botRollCount += 1
@@ -49,7 +47,17 @@ class Game:
                         break
         #More than one roll available and its second or third round => minimax
         else:
-            pass
+            self.botTree = Tree(self.RollCount, self.botRollCount, self.evalRoll(self.botHand))
+            if self.botTree.decide() == 1:
+                self.botRollCount += 1
+                self.botHand = self.diceRoll()
+                self.gui.pushBotHist(self.botHand)
+                if self.botRollCount < self.RollCount:
+                    self.botTree = Tree(self.RollCount, self.botRollCount, self.evalRoll(self.botHand))
+                    if self.botTree.decide() == 1:
+                        self.botRollCount += 1
+                        self.botHand = self.diceRoll()
+                        self.gui.pushBotHist(self.botHand)
         self.nextRound()
 
     def evalRoll(self, roll):
