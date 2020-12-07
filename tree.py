@@ -9,10 +9,10 @@ class Tree:
 
     def build(self, node):
         if node.type == 0 and node.playerRollCount > node.botRollCount:
-            node.nextNode.append(Node(node.type, 2, node.playerRollCount, node.botRollCount + 1))
+            node.nextNode.append(Node(node.type, 1, node.playerRollCount, node.botRollCount + 1))
             self.build(node.nextNode[0])
 
-        elif node.type == 2:
+        elif node.type == 1:
             for i in range(0, len(self.chances)):
                 node.nextNode.append(Node(node.type, node.playerRollCount, node.botRollCount, i))
                 self.build(node.nextNode[i])
